@@ -96,10 +96,9 @@ fun remove_card (b, c, e) =
       
   fun all_same_color b =
       case b of
-	  [] => true
-	| [(_,_)] => true 
-	| (b1,b2)::(b3,b4)::bs => (card_color(b1,b2) = card_color(b3,b4)) andalso all_same_color(bs)
-
+	  [] => true 
+	| (b1,b2)::(b3,b4)::bs => (card_color(b1,b2) = card_color(b3,b4)) andalso all_same_color((b3,b4)::bs)
+	| [(_,_)] => true
 
 
   fun sum_cards b =
