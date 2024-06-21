@@ -20,4 +20,26 @@
                               [(null? xs) (error "list-nth-mod: empty list")]
                               [#t (car (list-tail xs (remainder n (length xs))))]))
 
-(define (stream-for-n-steps s n) 
+(define (stream-for-n-steps s n)
+  (let loop ([acc null] [count n] [thunk (s)])
+    (if (= count 0)
+        (reverse acc)
+        (loop (cons (car thunk) acc) (- count 1) ((cdr thunk))))))
+
+(define funny-number-stream
+  (letrec ([f (lambda (x)
+                (if (= (remainder x 5) 0)
+                    (cons (- x) (lambda () (f (+ x 1))))
+                    (cons x (lambda () (f (+ x 1))))))])
+    (lambda () (f 1))))
+
+
+(define dan-then-dog
+  (letrec ([f (lambda (x)
+                (cons x (lambda () (f (if (string=? x "dan.jpg") "dog.jpg" "dan.jpg")))))])
+    (lambda () (f "dan.jpg"))))
+
+(define (stream-add-zero s)
+  (letrec ([f (lambda (x)
+                (cons (cons 0 (car (x))) (lambda () (f (cdr (x))))))])
+    (lambda () (f s))))
