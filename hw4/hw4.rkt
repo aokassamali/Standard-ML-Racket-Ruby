@@ -43,3 +43,10 @@
   (letrec ([f (lambda (x)
                 (cons (cons 0 (car (x))) (lambda () (f (cdr (x))))))])
     (lambda () (f s))))
+
+(define (cycle-lists xs ys)
+  (letrec ([len-xs (length xs)] [len-ys (length ys)] [f (lambda (n)
+                (cons (cons (list-nth-mod xs (remainder n len-xs)) (list-nth-mod ys (remainder n len-ys)))
+                      (lambda () (f (+ n 1)))))])
+    (lambda () (f 0))))
+                          
