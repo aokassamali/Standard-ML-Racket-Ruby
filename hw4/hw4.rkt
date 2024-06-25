@@ -49,4 +49,16 @@
                 (cons (cons (list-nth-mod xs (remainder n len-xs)) (list-nth-mod ys (remainder n len-ys)))
                       (lambda () (f (+ n 1)))))])
     (lambda () (f 0))))
-                          
+
+(define (vector-assoc v vec)
+  (letrec ([length (- (vector-length vec) 1)]
+           [f (lambda (n)
+                (cond [(and (pair? (vector-ref vec n)) (equal? v (car (vector-ref vec n)))) (vector-ref vec n)]
+                      [(not (= n length)) (f (+ n 1))]
+                      [#t #f]))])
+    (f 0)))
+                                                   
+(define (cached-assoc xs n)
+  (letrec ([memo (vector)] [slot 0]
+           [f (lambda (v)
+                
